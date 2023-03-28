@@ -47,6 +47,10 @@ public class BookService {
         return mapper.updateListDTO(books);
     }
 
+    public List<BookDTO> findByNameOrIssn(String search) {
+        List<BookEntity> books = repository.findByNameOrIssn(search);
+        return mapper.updateListDTO(books);
+    }
 
     public BookDTO create(BookDTO bookDTO) {
         BookEntity book = mapper.update(bookDTO);

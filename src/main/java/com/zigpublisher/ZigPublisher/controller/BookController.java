@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/livros")
 @Slf4j
@@ -61,6 +63,16 @@ public class BookController {
     public ResponseEntity<?> getByPublisher(@PathVariable("idEditora") Long publisherId) {
         try {
             return ResponseEntity.ok(bookService.getByPublisherId(publisherId));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
+        }
+    }
+
+    @GetMapping("/search/{searchParam}")
+    public ResponseEntity<?> findByNameOrIssn(@RequestParam("searchParam") String search) {
+        try {
+            return ResponseEntity.ok(bookService.findByNameOrIssn(search));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
