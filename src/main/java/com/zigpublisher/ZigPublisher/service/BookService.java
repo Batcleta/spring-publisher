@@ -4,6 +4,7 @@ import com.zigpublisher.ZigPublisher.model.dto.BookDTO;
 import com.zigpublisher.ZigPublisher.model.dto.CategoryDTO;
 import com.zigpublisher.ZigPublisher.model.entity.BookEntity;
 import com.zigpublisher.ZigPublisher.model.entity.CategoryEntity;
+import com.zigpublisher.ZigPublisher.model.entity.PublisherEntity;
 import com.zigpublisher.ZigPublisher.model.mapper.BookMapper;
 import com.zigpublisher.ZigPublisher.repository.BookRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,10 +33,17 @@ public class BookService {
         return mapper.updateListDTO(books);
     }
 
-    public List<BookDTO> getByCategory(Long categoryId) {
+    public List<BookDTO> getByCategoryId(Long categoryId) {
         CategoryEntity categoria = new CategoryEntity();
         categoria.setId(categoryId);
         List<BookEntity> books = repository.findByCategory(categoria);
+        return mapper.updateListDTO(books);
+    }
+
+    public List<BookDTO> getByPublisherId(Long publisherId) {
+        PublisherEntity publisher = new PublisherEntity();
+        publisher.setId(publisherId);
+        List<BookEntity> books = repository.findByPublisher(publisher);
         return mapper.updateListDTO(books);
     }
 

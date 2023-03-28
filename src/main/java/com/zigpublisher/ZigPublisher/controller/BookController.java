@@ -47,6 +47,26 @@ public class BookController {
         }
     }
 
+    @GetMapping("/categoria/{idCategoria}")
+    public ResponseEntity<?> getByCategory(@PathVariable("idCategoria") Long categoryId) {
+        try {
+            return ResponseEntity.ok(bookService.getByCategoryId(categoryId));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
+        }
+    }
+
+    @GetMapping("/editora/{idEditora}")
+    public ResponseEntity<?> getByPublisher(@PathVariable("idEditora") Long publisherId) {
+        try {
+            return ResponseEntity.ok(bookService.getByPublisherId(publisherId));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
+        }
+    }
+
     @PostMapping("")
     public ResponseEntity<?> createBook(@RequestBody @Valid BookDTO bookDTO) {
         try {
@@ -57,7 +77,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody @Valid BookDTO bookDTO) {
+    public ResponseEntity<?> updateBook(@PathVariable("id") Long id, @RequestBody @Valid BookDTO bookDTO) {
         if (id == null) return ResponseEntity.badRequest().body(new MessageDTO("Id não pode ser nulo"));
 
         try {
