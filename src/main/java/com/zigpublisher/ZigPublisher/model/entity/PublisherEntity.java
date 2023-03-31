@@ -23,6 +23,7 @@ public class PublisherEntity {
     @Column(nullable=false, unique=true, length = 255)
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL)

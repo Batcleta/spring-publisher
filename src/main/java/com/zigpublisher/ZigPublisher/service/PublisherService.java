@@ -36,6 +36,7 @@ public class PublisherService {
     }
 
     public PublisherDTO update(PublisherDTO publisherDTO, Long id) {
+
         if (repository.existsById(id)) {
             PublisherEntity publisher = mapper.update(publisherDTO);
             publisher.setId(id);
