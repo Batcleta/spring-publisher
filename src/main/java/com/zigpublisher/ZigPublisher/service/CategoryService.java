@@ -20,13 +20,13 @@ public class CategoryService {
     private CategoryMapper mapper;
 
     public CategoryDTO getById(Long id) {
-        CategoryEntity categoryEntity = repository.findById(id)
+        CategoryEntity categoryEntity = repository.findByIdWithBooks(id)
                 .stream().findFirst().orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
         return mapper.update(categoryEntity);
     }
 
     public List<CategoryDTO> getAll() {
-        List<CategoryEntity> categoryEntities = repository.findAll();
+        List<CategoryEntity> categoryEntities = repository.findAllWithBooks();
         return mapper.updateListDTO(categoryEntities);
     }
 
