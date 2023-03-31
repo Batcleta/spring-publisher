@@ -1,8 +1,6 @@
 package com.zigpublisher.ZigPublisher.model.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -12,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDTO {
+public class BookUpdateDTO {
 
     private Long id;
 
@@ -26,10 +24,7 @@ public class BookDTO {
     @NotBlank(message = "o campo Name nao pode ser nulo")
     private String isbn;
 
-    @NotNull(message = "o campo Name nao pode ser nulo")
-    private PublisherDTO publisher;
-
-    @NotNull(message = "o campo Name nao pode ser nulo")
-    private CategoryDTO category;
+    private Long publisher_id;
+    private Long category_id;
 
 }

@@ -2,6 +2,7 @@ package com.zigpublisher.ZigPublisher.service;
 
 import com.zigpublisher.ZigPublisher.model.dto.BookCreationDTO;
 import com.zigpublisher.ZigPublisher.model.dto.BookDTO;
+import com.zigpublisher.ZigPublisher.model.dto.BookUpdateDTO;
 import com.zigpublisher.ZigPublisher.model.dto.CategoryDTO;
 import com.zigpublisher.ZigPublisher.model.entity.BookEntity;
 import com.zigpublisher.ZigPublisher.model.entity.CategoryEntity;
@@ -81,12 +82,31 @@ public class BookService {
         return mapper.update(newBook);
     }
 
-    public BookDTO update(BookDTO bookDTO, Long id) {
-        if (repository.existsById(id)) {
-            BookEntity book = mapper.update(bookDTO);
-            book.setId(id);
-            book = repository.save(book);
-            return mapper.update(book);
+    public BookDTO update(BookUpdateDTO bookDTO, Long id) {
+
+        Optional<BookEntity> optionalBook = repository.findById(id);
+
+        if (optionalBook.isPresent()) {
+            BookEntity updatedBook = optionalBook.get();
+            updatedBook.setId(id);
+            updatedBook.setName(bookDTO.getName());
+            updatedBook.setDescription(bookDTO.getDescription());
+            updatedBook.setIsbn(bookDTO.getIsbn());
+            updatedBook = repository.save(updatedBook);
+
+            if (bookDTO.getPublisher_id() != null) {
+                PublisherEntity publisher = publisherRepository.findById(bookDTO.getPublisher_id())
+                        .stream().findFirst().orElseThrow(() -> new EntityNotFoundException("Livro não encontrado"));
+                updatedBook.setPublisher(publisher);
+            }
+
+            if (bookDTO.getCategory_id() != null) {
+                CategoryEntity category = categoryRepository.findById(bookDTO.getCategory_id())
+                        .stream().findFirst().orElseThrow(() -> new EntityNotFoundException("Livro não encontrado"));
+                updatedBook.setCategory(category);
+            }
+
+            return mapper.update(updatedBook);
         }
 
         throw new EntityNotFoundException("Categoria não encontrada");

@@ -1,9 +1,6 @@
 package com.zigpublisher.ZigPublisher.controller;
 
-import com.zigpublisher.ZigPublisher.model.dto.BookCreationDTO;
-import com.zigpublisher.ZigPublisher.model.dto.BookDTO;
-import com.zigpublisher.ZigPublisher.model.dto.MessageDTO;
-import com.zigpublisher.ZigPublisher.model.dto.PublisherDTO;
+import com.zigpublisher.ZigPublisher.model.dto.*;
 import com.zigpublisher.ZigPublisher.service.BookService;
 import com.zigpublisher.ZigPublisher.service.PublisherService;
 import jakarta.persistence.EntityNotFoundException;
@@ -99,7 +96,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateBook(@PathVariable("id") Long id, @RequestBody @Valid BookDTO bookDTO) {
+    public ResponseEntity<?> updateBook(@PathVariable("id") Long id, @RequestBody @Valid BookUpdateDTO bookDTO) {
         if (id == null) return ResponseEntity.badRequest().body(new MessageDTO("Id não pode ser nulo"));
 
         try {
