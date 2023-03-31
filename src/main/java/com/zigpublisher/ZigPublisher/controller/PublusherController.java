@@ -6,9 +6,11 @@ import com.zigpublisher.ZigPublisher.model.dto.PublisherDTO;
 import com.zigpublisher.ZigPublisher.service.CategoryService;
 import com.zigpublisher.ZigPublisher.service.PublisherService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +53,12 @@ public class PublusherController {
     public ResponseEntity<?> createPublisher(@RequestBody @Valid PublisherDTO publisherDTO) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(publisherService.create(publisherDTO));
+        } catch (DataIntegrityViolationException e) {
+            if (e.getCause() instanceof ConstraintViolationException) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDTO("Já Existe uma editora com este nome"));
+            } else {
+                return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
         }

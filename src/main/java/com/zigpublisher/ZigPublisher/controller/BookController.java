@@ -6,9 +6,11 @@ import com.zigpublisher.ZigPublisher.model.dto.PublisherDTO;
 import com.zigpublisher.ZigPublisher.service.BookService;
 import com.zigpublisher.ZigPublisher.service.PublisherService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/livros")
+@RequestMapping("/api/livros")
 @Slf4j
 public class BookController {
 
@@ -83,6 +85,12 @@ public class BookController {
     public ResponseEntity<?> createBook(@RequestBody @Valid BookDTO bookDTO) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(bookService.create(bookDTO));
+        } catch (DataIntegrityViolationException e) {
+            if (e.getCause() instanceof ConstraintViolationException) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDTO("Já Existe um livro com este nome"));
+            } else {
+                return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
         }

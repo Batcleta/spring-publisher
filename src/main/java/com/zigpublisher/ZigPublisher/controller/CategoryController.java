@@ -4,15 +4,17 @@ import com.zigpublisher.ZigPublisher.model.dto.CategoryDTO;
 import com.zigpublisher.ZigPublisher.model.dto.MessageDTO;
 import com.zigpublisher.ZigPublisher.service.CategoryService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/categorias")
+@RequestMapping("/api/categorias")
 @Slf4j
 public class CategoryController {
 
@@ -48,8 +50,16 @@ public class CategoryController {
     public ResponseEntity<?> createCategory(@RequestBody @Valid CategoryDTO categoryDTO) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.create(categoryDTO));
+        } catch (DataIntegrityViolationException e) {
+            if (e.getCause() instanceof ConstraintViolationException) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDTO("Já Existe uma categoria com este nome"));
+            } else {
+                return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
+            }
         } catch (Exception e) {
+
             return ResponseEntity.badRequest().body(new MessageDTO(e.getMessage()));
+
         }
     }
 
