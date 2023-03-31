@@ -1,5 +1,6 @@
 package com.zigpublisher.ZigPublisher.controller;
 
+import com.zigpublisher.ZigPublisher.model.dto.BookCreationDTO;
 import com.zigpublisher.ZigPublisher.model.dto.BookDTO;
 import com.zigpublisher.ZigPublisher.model.dto.MessageDTO;
 import com.zigpublisher.ZigPublisher.model.dto.PublisherDTO;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -82,7 +84,7 @@ public class BookController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createBook(@RequestBody @Valid BookDTO bookDTO) {
+    public ResponseEntity<?> createBook(@RequestBody @Valid BookCreationDTO bookDTO) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(bookService.create(bookDTO));
         } catch (DataIntegrityViolationException e) {

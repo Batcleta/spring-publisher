@@ -19,6 +19,9 @@ public class BookEntity {
     @Column(nullable = false, unique = true, length = 255)
     private String name;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @Column(nullable = false, length = 13)
     private String isbn;
 

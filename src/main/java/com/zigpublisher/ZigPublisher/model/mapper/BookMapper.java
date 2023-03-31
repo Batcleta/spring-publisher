@@ -15,6 +15,7 @@ public class BookMapper {
         BookDTO bookDTO = new BookDTO();
         bookDTO.setId(book.getId());
         bookDTO.setName(book.getName());
+        bookDTO.setDescription(book.getDescription());
         bookDTO.setIsbn(book.getIsbn());
         bookDTO.setCategory(categoryMapper.update(book.getCategory()));
         bookDTO.setPublisher(publisherMapper.update(book.getPublisher()));
@@ -25,6 +26,7 @@ public class BookMapper {
         BookEntity book = new BookEntity();
         book.setId(bookDTO.getId());
         book.setName(bookDTO.getName());
+        book.setDescription(bookDTO.getDescription());
         book.setIsbn(bookDTO.getIsbn());
         book.setCategory(categoryMapper.update(bookDTO.getCategory()));
         book.setPublisher(publisherMapper.update(bookDTO.getPublisher()));
